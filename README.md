@@ -9,9 +9,17 @@ As shown in `example.py` you can default to include everything or nothing by def
 import argparse
 import ParseSlice
 parser = argparse.ArgumentParser()
+# Explicit approach
 parser.add_argument('--default-to-everything', nargs='*', action=ParseSlice.ParseSlice, default=ParseSlice.Everything)
 parser.add_argument('--default-to-nothing',    nargs='*', action=ParseSlice.ParseSlice, default=ParseSlice.Nothing   )
+# With sugar
+parser.add_argument('--star-star-everything', **ParseSlice.SliceEverything)
+parser.add_argument('--star-star-nothing',    **ParseSlice.SliceNothing)
+parser.add_argument('--star-star-default',    **ParseSlice.SliceWithDefault([2, 3, 5, 7]))
 ```
+When adding an argument that should be parsed as a slice, it is crucial `nargs='*'` and the slicing happens via the [`action`](https://docs.python.org/3/library/argparse.html#action) option.  Only then can the parsing happen to the whole slice specification as one object, rather than piece-by-piece.
+
+To make specifying `nargs`, `action` and a `default` simple, the simple syntactic sugar `**SliceEverything`, `**SliceNothing` and `**SliceWithDefault(your_default)` are provided that can be used with `**kwarg` unpacking, as shown.  *Using this sugar is the _strongly_ suggested approach!*
 
 If the user passes an argument with a colon, such as `2::2` they will receive a `slice` object.
 

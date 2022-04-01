@@ -54,6 +54,11 @@ class ParseSlice(argparse.Action):
 
         setattr(namespace, self.dest, s)
 
+def SliceWithDefault(default):
+    return {'nargs': '*', 'action': ParseSlice, 'default': default}
+
+SliceEverything=SliceWithDefault(Everything)
+SliceNothing   =SliceWithDefault(   Nothing)
 
 if __name__ == '__main__':
     import sys
