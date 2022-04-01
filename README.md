@@ -4,12 +4,13 @@ Sometimes we need to parse slices to extract subarrays.
 
 This utility helps a user of python's [argparse](https://docs.python.org/3/library/argparse.html) parse a variety of formats for expressing which indices to take.
 
-You can default to include everything or nothing by default, via
-```
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--slice-that-defaults-to-everything', nargs='*', action=ParseSlice, default=Everything)
-    parser.add_argument('--slice-that-defaults-to-nothing',    nargs='*', action=ParseSlice, default=Nothing)
+As shown in `example.py` you can default to include everything or nothing by default, via
+```python
+import argparse
+import ParseSlice
+parser = argparse.ArgumentParser()
+parser.add_argument('--default-to-everything', nargs='*', action=ParseSlice.ParseSlice, default=ParseSlice.Everything)
+parser.add_argument('--default-to-nothing',    nargs='*', action=ParseSlice.ParseSlice, default=ParseSlice.Nothing   )
 ```
 
 If the user passes an argument with a colon, such as `2::2` they will receive a `slice` object.
