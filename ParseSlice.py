@@ -32,11 +32,20 @@
 
 import argparse
 
+Everything = slice(None, None, 1)
+Nothing    = slice(None, 0, None)
+
 class ParseSlice(argparse.Action):
 
     def __call__(self, parser, namespace, values, options_string=None):
 
-        if len(values) == 1 and ':' in values[0]:
+        if len(values) == 0:
+            s = Everything
+
+        elif len(values) == 1 and values[0] == ':':
+            s = Everything
+        
+        elif len(values) == 1 and ':' in values[0]:
             s = slice(*[int(s) if s else None for s in values[0].split(":")])
 
         else:
@@ -51,11 +60,15 @@ if __name__ == '__main__':
     import numpy as np
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--slice', nargs='*', action=ParseSlice)
+    parser.add_argument('--slice', nargs='*', action=ParseSlice, default=Everything)
 
     x = np.arange(0,10)
     
     default_formats = [
+                '--slice :',
+                '',
+                '--slice ',
+                '--slice :0',
                 '--slice 1:6',
                 '--slice 1 2 3 4 5',
                 '--slice [1 2 3 4 5]',
